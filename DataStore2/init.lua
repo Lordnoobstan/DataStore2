@@ -424,6 +424,16 @@ do
 	function CombinedDataStore:SetBackup(retries)
 		self.combinedStore:SetBackup(retries)
 	end
+
+	function CombinedDataStore:AfterSave(callback)
+		local function wrappedCallback(save)
+			local saveValue = save[self.combinedName]
+			
+			return callback(saveValue)
+		end
+		
+		self.combinedStore:AfterSave(wrappedCallback)
+	end
 end
 
 local DataStoreMetatable = {}
